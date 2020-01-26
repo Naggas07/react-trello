@@ -1,0 +1,7 @@
+.board{
+    display: flex;
+    justify-content: flex-start;
+    overflow: scroll;
+    padding-top: 20px;
+    min-height: 100vh;
+}

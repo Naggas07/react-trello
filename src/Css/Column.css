@@ -1,0 +1,18 @@
+.column{
+    background-color: rgba(69, 67, 67, 0.077);
+    padding: 10px 5px;
+    border: 1px solid black;
+    min-width: 300px;
+    margin: 0 15px;
+    border-radius: 25px;
+    margin-right: 20px;
+    max-height: 100vh;
+    height: 100%;
+    overflow: auto;
+}
+
+.column>h3{
+    font-size: 1.7rem;
+    font-weight: bold;
+    padding: 10px 0;
+}

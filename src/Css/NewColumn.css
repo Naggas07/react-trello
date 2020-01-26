@@ -1,0 +1,9 @@
+.create-column-form{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.create-column-form input{
+    margin-bottom: 5px;
+}
