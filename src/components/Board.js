@@ -24,7 +24,9 @@ class Board extends Component {
     return (
       <div className="board">
         {this.state.columns.map((column, i) => (
-          <Column key={i} column={column} />
+          <Column key={i}
+           column={column}
+           refreshColumns={this.refreshColumns} />
         ))}
         <NewColumn
         nextPosition={this.state.columns.length}
