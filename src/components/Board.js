@@ -16,6 +16,7 @@ class Board extends Component {
       .then(columns => this.setState({ columns }))
   }
 
+
   componentDidMount() {
     this.refreshColumns();
   }

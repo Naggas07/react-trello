@@ -13,6 +13,7 @@ const Column = props => {
     .then(props.refreshColumns)
   }
 
+  console.log(props, "column")
 
   return (
     <div className="column">
@@ -25,7 +26,9 @@ const Column = props => {
       </div>
 
       {cards.map(card => (
-        <Card key={card.id} card={card} />
+        <Card key={card.id}
+         card={card}
+         refreshColumns={props.refreshColumns}/>
       ))}
       <Link to={`/newCard/${id}`}>
           <div className="btn btn-block btn-secondary">Add new card</div>
