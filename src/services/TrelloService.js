@@ -5,9 +5,11 @@ const http = axios.create({
 });
 
 const getColumns = () => http.get('/columns').then(response => response.data);
-const createColumns = (data) => http.post('/columns').then(response => response.data )
+const createColumns = (column) => http.post('/columns', column)
+const deleteColumn = (columnId) => http.delete(`/columns/${columnId}`)
 
 export default {
   getColumns,
-  createColumns
+  createColumns,
+  deleteColumn
 };

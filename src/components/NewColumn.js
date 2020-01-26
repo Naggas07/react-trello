@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import services from "../services/TrelloService";
 import '../Css/NewColumn.css'
 
 const validators = {
@@ -36,19 +37,21 @@ class NewColumn extends Component {
     handelSubmit = (event) => {
         event.preventDefault()
 
-        const col ={
-            title: this.state.data.title
+        const column ={
+            title: this.state.data.title,
+            position: this.props.nextPosition
         }
 
-        this.props.createColum(col.title)
+        
+        services.createColumns(column)
+            .then(this.props.refreshColumns)
 
         this.setState({
             data:{
                 title: ''
-            }, errors: {
-                title: true
             }
         })
+
     }
 
 
@@ -56,15 +59,15 @@ class NewColumn extends Component {
         return ( 
             <div className="column">
             <h3>New Column</h3>
-            <form className="create-column-form">
+            <form className="create-column-form"
+            onSubmit={this.handelSubmit}>
                 <input type="text"
                 placeholder="Title"
                 onChange={this.handelChange}
                 value={this.state.data.title}
                 name="title"
                 />
-                <button className="btn btn-success"
-                onSubmit={()=> this.handelSubmit}>Create</button>
+                <button className="btn btn-success">Create</button>
             </form>
         </div>
          );
