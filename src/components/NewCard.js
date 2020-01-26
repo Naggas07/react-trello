@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import services from "../services/TrelloService";
-import '../Css/NewCard.css'
+import "../Css/NewCard.css";
+import { Redirect, Link } from "react-router-dom";
+
+const validators = {
+  title: val => val.length > 3,
+  description: val => val.length > 3,
+  labels: val => val.length >= 0
+};
 
 class NewCard extends Component {
   state = {
@@ -11,9 +18,24 @@ class NewCard extends Component {
       position: 0,
       column: this.props.match.params.id
     },
-    options:{
-        labels: ['Learning Unit', 'Kata', 'Example', 'Lab', 'Done!', 'Review', 'Bonus']
-    }
+    options: {
+      labels: [
+        "Learning Unit",
+        "Kata",
+        "Example",
+        "Lab",
+        "Done!",
+        "Review",
+        "Bonus"
+      ]
+    },
+    touch: {},
+    errors: {
+      title: true,
+      description: true,
+      labels: false
+    },
+    toBoard: false
   };
 
   componentDidMount() {
@@ -27,54 +49,129 @@ class NewCard extends Component {
     });
   }
 
-  handelChange = event => {
-    const {name, value} = event.target
-
-        this.setState({
-            data: {
-              ...this.state.data,
-              [name]: value
-            }
-          })
+  labelUpdate = label => {
+    if (this.state.data.labels.includes(label)) {
+      this.setState({
+        data: {
+          ...this.state.data,
+          labels: this.state.data.labels.splice(
+            this.state.data.labels.indexOf(label),
+            1
+          )
+        }
+      });
+    } else {
+      this.setState({
+        data: {
+          ...this.state.data,
+          labels: this.state.data.labels.push(label)
+        }
+      });
     }
-  
+  };
+
+  handelChange = event => {
+    const { name, value } = event.target;
+    const valid = validators[name](value);
+
+    this.setState({
+      data: {
+        ...this.state.data,
+        [name]: value
+      },
+      errors: {
+        ...this.state.errors,
+        [name]: !valid
+      }
+    });
+  };
+
+  handelBlur = event => {
+    const { name } = event.target;
+
+    this.setState({
+      touch: {
+        ...this.state.touch,
+        [name]: true
+      }
+    });
+  };
+
+  handelUpdated = event => {
+    const { name } = event.target;
+
+    this.setState({
+      data: {
+        ...this.state.data,
+        labels: this.labelUpdate(name)
+      }
+    });
+  };
+
+  handelSubmit = event => {
+    event.preventDefault()
+
+    const card = {
+      ...this.state.data
+    }
+
+    services.createCard(card)
+      .then(card => {
+        this.setState({
+          toBoard: true
+        })
+      })
+
+  }
 
   render() {
-    return(
-        <article className="new-card container mt-4">
-        <form >
+    if (this.state.toBoard) {
+      return <Redirect to="/"/>
+    }
+
+
+    return (
+      <article className="new-card container mt-4">
+        <form onSubmit={this.handelSubmit}>
           <div className="form-group">
             <label htmlFor="title">Insert title</label>
-            <input required type="text"
-            className="form-control"
-            placeholder="title"
-            name="title" 
-            onChange={this.handelChange}
-            value={this.state.data.title}/>
+            <input
+              required
+              type="text"
+              className="form-control"
+              placeholder="title"
+              name="title"
+              onChange={this.handelChange}
+              value={this.state.data.title}
+              onBlur={this.handelBlur}
+            />
           </div>
 
           <div className="form-group">
             <label htmlFor="description">Insert description</label>
-            <textarea required type="text"
-            className="form-control"
-            placeholder="description"
-            name="description" 
-            onChange={this.handelChange}
-            value={this.state.data.description}/>
+            <textarea
+              required
+              type="text"
+              className="form-control"
+              placeholder="description"
+              name="description"
+              onChange={this.handelChange}
+              onBlur={this.handelBlur}
+              value={this.state.data.description}
+            />
           </div>
-          <div className="form-group">
-            <label htmlFor="labels">labels</label>
-            <select className="form-control"
-             name="labels" 
-             onChange={this.handelChange}>
-                {this.state.options.labels.map((item, i) => <option key={i}> {item} </option>)}
-            </select>
+          <div className="form-group options">
+           pending of update labels
           </div>
 
-          <button type="submit" className="btn btn-primary btn-block">Create</button>
+          <button type="submit" className="btn btn-primary btn-block">
+            Create
+          </button>
         </form>
+
+        <Link to="/">Go Back</Link>
       </article>
-    )
+    );
   }
 }
 

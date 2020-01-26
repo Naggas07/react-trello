@@ -9,9 +9,12 @@ const getColumn = (id) => http.get(`/columns/${id}`)
 const createColumns = (column) => http.post('/columns', column)
 const deleteColumn = (columnId) => http.delete(`/columns/${columnId}`)
 
+const createCard = (card) => http.post('/cards', card)
+
 export default {
   getColumns,
   createColumns,
   deleteColumn,
-  getColumn
+  getColumn,
+  createCard
 };
