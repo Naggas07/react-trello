@@ -56,6 +56,7 @@ class NewColumn extends Component {
 
 
     render() { 
+        const disabled = this.state.errors.title
         return ( 
             <div className="column">
             <h3>New Column</h3>
@@ -67,7 +68,7 @@ class NewColumn extends Component {
                 value={this.state.data.title}
                 name="title"
                 />
-                <button className="btn btn-success">Create</button>
+                <button className="btn btn-success" disabled={disabled} >Create</button>
             </form>
         </div>
          );
